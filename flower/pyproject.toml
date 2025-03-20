@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "Flower_container"
+version = "0.1.0"
+description = ""
+authors = ["jonra1993 <jon_ra@hotmail.es>"]
+package-mode = false
+
+[tool.black]
+line-length = 88
+target-version = [ "py310", "py311" ]
+exclude = "((.eggs | .git | .pytest_cache | build | dist))"
+
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = ["alembic", "__pycache__"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flower = "^1.2.0"
+requests= "^2.25.0"
+celery = "^5.3.6"
+redis = "^4.5.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

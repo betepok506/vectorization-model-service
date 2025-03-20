@@ -1,0 +1,32 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
+// https://containers.dev/implementors/spec/
+{
+    "name": "vectorization-model",
+    // "initializeCommand": "",
+    // "context": "../",
+    "dockerComposeFile": "../docker-compose-dev.yml",
+    "service": "fastapi_server",
+    "workspaceFolder": "/code",
+    "shutdownAction": "stopCompose",
+    "extensions": [
+        "ms-python.python@2024.22.0", // для работы на Python
+        "ms-vscode-remote.remote-containers", // dev-containers
+        "eamodio.gitlens@12.1.1", // надстройка для работы с git
+        "GrapeCity.gc-excelviewer@4.2.55", // редактор таблиц
+        "njpwerner.autodocstring@0.6.1", // автодобавление docsting
+        "KevinRose.vsc-python-indent@1.17.0", // автовыравнивание
+        "kevinrose.vsc-python-indent", // форматирование кода
+        "ms-vscode.makefile-tools", // форматирование для makefile
+        "ms-python.black-formatter", // Для форматирования кода
+        "ritwickdey.liveserver", // Для просмотра web страниц
+        "mtxr.sqltools", // для подключения к базе данных
+        "mtxr.sqltools-driver-pg", //Драйвер для подключения к Postgres
+        "cweijan.vscode-redis-client" // Redis
+    ],
+    "settings": {
+        "python.pythonPath": "/usr/local/bin/python",
+        "python.linting.pylintEnabled": true,
+        "python.linting.enabled": true
+    },
+    // "postCreateCommand": "cd backend && make install-backend "
+}
