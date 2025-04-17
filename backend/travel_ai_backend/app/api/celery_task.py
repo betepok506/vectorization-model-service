@@ -6,7 +6,16 @@ from celery import Task
 from transformers import AutoModel, AutoTokenizer
 import torch
 from typing import List
+import numpy as np
 
+class MokeModel:
+    def __init__(self, *args, **kwds):
+        pass
+
+    def __call__(self, *args, **kwds):
+        rng1 = np.random.default_rng()
+        rng1.random() 
+        return [rng1.random()] * 768
 
 class CustomPipeline:
     def __init__(self, model_name):
@@ -48,7 +57,8 @@ class PredictTransformersPipelineTask(Task):
         """
         if not self.pipeline:
             logging.info("Loading pipeline...")
-            self.pipeline = CustomPipeline(self.model_name)
+            # self.pipeline = CustomPipeline(self.model_name)
+            self.pipeline = MokeModel(self.model_name)
             logging.info("Pipeline loaded")
         return self.run(*args, **kwargs)
 

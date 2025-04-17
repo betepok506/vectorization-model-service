@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 from travel_ai_backend.app.api.v1.api import api_router as api_router_v1
 from travel_ai_backend.app.core.config import ModeEnum, settings
 from travel_ai_backend.app.utils.fastapi_globals import GlobalsMiddleware, g
-from travel_ai_backend.app.api.celery_task import CustomPipeline
+from travel_ai_backend.app.api.celery_task import CustomPipeline, MokeModel
 
 # os.environ["HTTP_PROXY"] = "http://130.100.7.222:1082"
 # os.environ["HTTPS_PROXY"] = "http://130.100.7.222:1082"
@@ -20,7 +20,8 @@ async def lifespan(app: FastAPI):
     # Startup
     # Load a pre-trained sentiment analysis model as a dictionary to an easy cleanup
     models: dict[str, Any] = {
-        "sentiment_model": CustomPipeline("Tochka-AI/ruRoPEBert-e5-base-2k")
+        # "sentiment_model": CustomPipeline("Tochka-AI/ruRoPEBert-e5-base-2k")
+        "sentiment_model": MokeModel("Tochka-AI/ruRoPEBert-e5-base-2k")
     }
     g.set_default("sentiment_model", models["sentiment_model"])
     print("startup fastapi")
