@@ -3,7 +3,7 @@ import json
 from aio_pika import connect, Message
 
 
-name_queue = "text_processing"
+name_queue = "vectorize_queue"
 
 
 async def send_message_async():
@@ -29,7 +29,7 @@ async def send_message_async():
                 message_body = {
                     "text": "Это первый пример предложения. Вот второе предложение! И наконец третье...",
                     "message_id": "123e4567-e89b-12d3-a456-426614174000",
-                    "language": "russian",
+                    "callback_queue": "prompt_generator_embeddings",
                     "metadata": {"source": "web", "author": "Иванов И.И."},
                     # 'test': "opa-opa-opa-pa"
                 }

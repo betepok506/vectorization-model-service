@@ -43,11 +43,11 @@ class MessageConsumer:
             arguments={"x-max-priority": 10, "x-queue-type": "classic"},
         )
         # Объявляем выходную очередь (для результатов) и очередь ошибок
-        await self.connection_manager.channel.declare_queue(
-            self.config["output_queue"],
-            durable=True,
-            arguments={"x-queue-type": "classic"},
-        )
+        # await self.connection_manager.channel.declare_queue(
+        #     self.config["output_queue"],
+        #     durable=True,
+        #     arguments={"x-queue-type": "classic"},
+        # )
         await self.connection_manager.channel.declare_queue(
             self.config["error_queue"],
             durable=True,
@@ -79,13 +79,14 @@ class MessageConsumer:
             batch = self.pending_messages[: self.processor.batch_size]
             self.pending_messages = self.pending_messages[self.processor.batch_size :]
         try:
-            texts = [msg["text"] for msg, _ in batch]
+            texts = [msg.text for msg, _ in batch]
             vectors = await self.processor.process_text(texts)
             for (original_msg, message), vector in zip(batch, vectors):
                 result = {
-                    "message_id": original_msg.get("message_id"),
+                    "message_id": original_msg.message_id,
                     "vector": vector,
-                    "metadata": original_msg.get("metadata", {}),
+                    "metadata": original_msg.metadata,
+                    "callback_queue": original_msg.callback_queue
                 }
                 await self.send_result(result, message.correlation_id)
         except Exception as e:
@@ -100,7 +101,7 @@ class MessageConsumer:
         )
         await self.connection_manager.channel.default_exchange.publish(
             message,
-            routing_key=self.config["output_queue"],
+            routing_key=result["callback_queue"],
         )
 
     async def send_error(

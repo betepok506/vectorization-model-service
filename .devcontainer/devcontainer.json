@@ -5,7 +5,7 @@
     // "initializeCommand": "",
     // "context": "../",
     "dockerComposeFile": "../docker-compose-dev.yml",
-    "service": "fastapi_server",
+    "service": "vectorization_server",
     "workspaceFolder": "/code",
     "shutdownAction": "stopCompose",
     "extensions": [

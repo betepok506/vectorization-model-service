@@ -3,7 +3,7 @@ from aio_pika import (
 )
 import json
 from typing import Dict, Any
-from travel_ai_backend.app.schemas.message import MessageSchema
+from travel_ai_backend.app.schemas.message import VectorizeRequestSchema
 
 class MessageValidator:
     """Класс для валидации и подготовки входящих сообщений."""
@@ -12,7 +12,7 @@ class MessageValidator:
     def validate(message: IncomingMessage) -> Dict[str, Any]:
         try:
             payload = json.loads(message.body.decode())
-            validated_data = MessageSchema(**payload)
+            validated_data = VectorizeRequestSchema(**payload)
             return validated_data
         except Exception as e:
             raise ValueError(f"Validation error: {e}") from e
