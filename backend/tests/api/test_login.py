@@ -1,8 +1,8 @@
 import pytest
 from httpx import AsyncClient
 from typing import AsyncGenerator
-from travel_ai_backend.app.main import app
-from travel_ai_backend.app.core.config import settings
+from app.main import app
+from app.core.config import settings
 
 url = "http://fastapi.localhost/api/v1"
 

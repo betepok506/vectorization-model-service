@@ -46,6 +46,7 @@ torch = [
   {url = "https://download.pytorch.org/whl/cpu/torch-2.5.1%2Bcpu-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux'"},
   {url = "https://download.pytorch.org/whl/cpu/torch-2.5.1%2Bcpu-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32'"}
 ]
+aio_pika = "^9.5.5"
 alembic = "^1.13.0"
 redis = "^4.5.1"
 minio = "^7.2.0"
@@ -74,6 +75,9 @@ wheel = "^0.42.0"
 setuptools = "^69.0.2"
 fastapi-limiter = "^0.1.5"
 pyjwt = {extras = ["crypto"], version = "^2.8.0"}
+tenacity = "*"
+prometheus_client = "*"
+colorlog = "*"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.6.10"

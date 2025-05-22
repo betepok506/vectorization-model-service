@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 from typing import AsyncGenerator
-from travel_ai_backend.app.main import app
+from app.main import app
 client = AsyncClient(app=app)
 
 url = "http://fastapi.localhost"

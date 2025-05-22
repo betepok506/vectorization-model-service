@@ -1,132 +1,18 @@
 version: '3.8'
 
 services:
-  fastapi_server:
-    container_name: fastapi_server
+  vectorization_server:
+    container_name: vectorization-server-${PROJECT_NAME}
     build: 
       context: .
       dockerfile: ./backend/Dockerfile
     restart: always
-    # command: "sh -c 'alembic upgrade head && uvicorn app.main:app --reload --workers 3 --host 0.0.0.0 --port 8000'"
-    command: "sh -c 'alembic upgrade head && gunicorn -w 3 -k uvicorn.workers.UvicornWorker travel_ai_backend.app.main:app  --bind 0.0.0.0:8000 --preload --log-level=debug --timeout 120'"
+    command: "uvicorn app.main:app --reload --workers 3 --host 0.0.0.0 --port 8000'"
     volumes:
       - ./backend:/code
     expose:
       - 8000
-    env_file: .env
-    depends_on:
-      - database
-    links:
-      - caddy_reverse_proxy:storage.localhost
-
-  database:
-    image: bitnami/postgresql
-    restart: always
-    container_name: database
-    env_file: ".env"
-    user: root
-    volumes:
-      - db_docker:/bitnami/postgresql
-      - ./database/create-dbs.sql:/docker-entrypoint-initdb.d/create-dbs.sql
     ports:
-      - 5454:5432 # Remove this on production
-    expose:
-      - 5432
-    # environment:
-    #   - POSTGRESQL_USERNAME=${DATABASE_USER}
-    #   # - POSTGRESQL_PASSWORD=${DATABASE_PASSWORD}
-    #   # - POSTGRESQL_PASSWORD=postgres
-    #   - POSTGRESQL_DATABASE=${DATABASE_NAME}
-
-  redis_server:
-    image: redis:alpine
-    container_name: redis_server    
-    restart: always
-    expose:
-      - 6379
+      - 8001:8000
     env_file: .env
-
-  celery_worker:
-    container_name: celery_worker
-    restart: always
-    # platform: linux/arm64/v8
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-    command: "watchfiles 'celery -A travel_ai_backend.app.core.celery worker -l info' "
-    volumes:
-      - ./backend:/code
-      # - "${EB_LOG_BASE_DIR}/php-app:/var/log/celery"
-    depends_on:
-      - database
-      - redis_server
-    env_file: .env
-  
-  celery_beat:  #Good for crontab and schedule tasks
-    container_name: celery_beat
-    restart: always
-    # platform: linux/arm64/v8
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-      # args:
-      #   INSTALL_DEV: ${INSTALL_DEV-false}
-    command: celery -A travel_ai_backend.app.core.celery beat -l info -S celery_sqlalchemy_scheduler.schedulers:DatabaseScheduler -l info
-    volumes:
-      - ./backend:/code
-      # - "${EB_LOG_BASE_DIR}/php-app:/var/log/celery-beat"
-    depends_on:
-      - database
-      - redis_server
-    env_file: .env
-
-  dashboard:
-    build: 
-      context: ./flower
-    command: celery --broker=redis://redis_server:6379/0 flower --port=5555
-    ports:
-      - 5556:5555
-    environment:
-      - CELERY_BROKER_URL=redis_server://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis_server://redis:6379/0
-    depends_on:
-      - database
-      - redis_server
-      - celery_worker
-
-  minio_server:
-    image: minio/minio:latest
-    restart: always
-    container_name: minio_server
-    volumes:
-      - ./minio/data:/data
-    expose:
-      - 9000
-      - 9091
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_BROWSER_REDIRECT_URL: http://stash.localhost
-    command: "server /data --console-address ':9090'"    
-
-  caddy_reverse_proxy:
-    container_name: caddy_reverse_proxy
-    image: caddy:alpine
-    restart: always
-    ports:
-      - 80:80      
-      - 443:443
-    environment:
-      - EXT_ENDPOINT1=${EXT_ENDPOINT1}
-      - LOCAL_1=${LOCAL_1}
-      - LOCAL_2=${LOCAL_2}
-    volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ./static:/code/static
-      - caddy_data:/data
-      - caddy_config:/config
-
-volumes:
-  db_docker:
-  caddy_data:
-  caddy_config:
+    
