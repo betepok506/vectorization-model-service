@@ -20,12 +20,6 @@ RUN apt-get update && \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \ 
-    apt-get install -y --no-install-recommends git && \
-    rm -rf /var/lib/apt/lists/*
-
-# COPY pyproject.toml /code/
-# RUN mkdir -p /code/backend/
 COPY backend/pyproject.toml backend/Makefile /code/
 
 WORKDIR /code

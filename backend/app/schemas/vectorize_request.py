@@ -3,7 +3,20 @@ from typing import List, Dict, Any
 
 
 class VectorizeRequestSchema(BaseModel):
-    """Схема данных, описывающая формат сообщений, отправляемых микросервису векторизации"""
+    """
+    Схема данных для запроса векторизации.
+
+    Attributes
+    ----------
+    message_id : str
+        Уникальный идентификатор запроса.
+    text : str
+        Текст для векторизации.
+    callback_queue : str
+        Имя очереди, в которую будет отправлен результат.
+    metadata : dict, optional
+        Дополнительные данные запроса.
+    """
 
     message_id: str
     text: str

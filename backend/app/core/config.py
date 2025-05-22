@@ -1,9 +1,5 @@
 import os
-from pydantic_core.core_schema import FieldValidationInfo
-from pydantic import PostgresDsn, EmailStr, AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Any
-import secrets
 from enum import Enum
 
 
@@ -12,6 +8,20 @@ class ModeEnum(str, Enum):
     production = "production"
     testing = "testing"
 
+
+# RabbitMQ
+RABBITMQ_URI = os.getenv("RABBITMQ_URI", "amqp://admin:secret@130.100.7.137:5672/")
+
+# Модель
+MODEL_NAME = os.getenv("VECTORIZE_MODEL", "Tochka-AI/ruRoPEBert-e5-base-2k")
+INPUT_QUEUE = os.getenv("INPUT_QUEUE", "vectorize_queue")
+# Батч
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
+MAX_WAIT = float(os.getenv("MAX_WAIT", "0.1"))
+
+# Логирование
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+LOG_JSON_FORMAT = os.getenv("LOG_JSON_FORMAT", "True")
 
 class Settings(BaseSettings):
     MODE: ModeEnum = ModeEnum.development

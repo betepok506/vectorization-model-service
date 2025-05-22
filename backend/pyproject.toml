@@ -75,6 +75,9 @@ wheel = "^0.42.0"
 setuptools = "^69.0.2"
 fastapi-limiter = "^0.1.5"
 pyjwt = {extras = ["crypto"], version = "^2.8.0"}
+tenacity = "*"
+prometheus_client = "*"
+colorlog = "*"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.6.10"
